@@ -1,6 +1,5 @@
 package dev.danielsantiago.aluvery.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,10 +28,10 @@ import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import dev.danielsantiago.aluvery.R
 import dev.danielsantiago.aluvery.model.Product
 import dev.danielsantiago.aluvery.numberFormat
-import dev.danielsantiago.aluvery.ui.theme.Purple200
-import dev.danielsantiago.aluvery.ui.theme.SeaGreen
 import java.math.BigDecimal
 
 @Composable
@@ -59,20 +59,21 @@ fun ProductItem(
                     .background(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
-                                Purple200,
-                                SeaGreen
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.secondary
                             )
                         )
                     )
             ) {
-                Image(
+                AsyncImage(
+                    model = product.image,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(imageSize)
                         .offset(y = imageSize / 2)
                         .clip(shape = CircleShape)
                         .align(Alignment.BottomCenter),
-                    painter = painterResource(id = product.image),
-                    contentDescription = "imagem",
+                    placeholder = painterResource(id = R.drawable.placeholder),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -89,7 +90,7 @@ fun ProductItem(
                     overflow = Ellipsis
                 )
                 Text(
-                    text = numberFormat.format(product.value),
+                    text = numberFormat.format(product.price),
                     fontSize = 14.sp,
                     fontWeight = FontWeight(400)
                 )
@@ -108,7 +109,8 @@ private fun ProductItemPreview() {
     ProductItem(
         Product(
             name = "Hamburgui",
-            value = BigDecimal("20.50")
+            price = BigDecimal("20.50"),
+            image = "https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg"
         )
     )
 }
